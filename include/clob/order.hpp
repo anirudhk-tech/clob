@@ -51,11 +51,13 @@ public:
 
   [[nodiscard]] auto get(OrderId order_id) const noexcept;
 
-  void set(OrderId order_id, Order* order) const noexcept;
+  void set(OrderId order_id, Order* order) noexcept;
 
   void clear(OrderId order_id) noexcept;
 
   [[nodiscard]] auto exists(OrderId order_id) const noexcept;
+
+  [[nodiscard]] auto max_id() const noexcept;
 
 private:
   std::vector<Order*> by_id_;
