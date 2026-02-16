@@ -1,12 +1,12 @@
+#pragma once
+
 #include <cstddef>
 #include <cstdint>
 #include <vector>
 
-namespace clob {
+#include "clob/types.hpp"
 
-using OrderId = std::uint32_t;
-using PriceTicks = std::int32_t;
-using Qty = std::int64_t;
+namespace clob {
 
 enum class Side : std::uint8_t {
   Buy,
