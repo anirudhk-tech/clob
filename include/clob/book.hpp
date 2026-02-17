@@ -15,14 +15,10 @@ public:
     bool accepted;
     std::optional<std::string_view> reject_reason;
   };
-  auto add_limit(OrderId order_id, Side side, PriceTicks price, Qty qty);
+  
+  AddResult add_limit(OrderId order_id, Qty qty, Side side, PriceTicks price);
 
-  auto cancel(OrderId order_id);
-
-  // debug
-  [[nodiscard]] auto num_live_order() const noexcept;
-  [[nodiscard]] auto best_bid() const noexcept;
-  [[nodiscard]] auto best_ask() const noexcept;
+  auto cancel(OrderId order_id) noexcept;
 
 private:
   OrderPool pool_;
@@ -33,7 +29,7 @@ private:
 
   std::uint64_t next_time_seq_{1};
 
-  auto is_valid_price(PriceTicks price) noexcept;
+  [[nodiscard]] static auto is_valid_price(PriceTicks price) noexcept;
   void assign_time_seq(Order& order) noexcept;
 };
 

@@ -32,7 +32,7 @@ class OrderPool {
 public:
   explicit OrderPool(std::size_t capacity);
 
-  auto allocate();
+  Order* allocate();
   void free(Order* order);
 
   [[nodiscard]] auto capacity() const noexcept;
@@ -49,13 +49,13 @@ class OrderIdMap {
 public:
   explicit OrderIdMap(std::size_t max_orders);
 
-  [[nodiscard]] auto get(OrderId order_id) const noexcept;
+  [[nodiscard]] Order* get(OrderId order_id) const noexcept;
 
   void set(OrderId order_id, Order* order) noexcept;
 
   void clear(OrderId order_id) noexcept;
 
-  [[nodiscard]] auto exists(OrderId order_id) const noexcept;
+  [[nodiscard]] bool exists(OrderId order_id) const noexcept;
 
   [[nodiscard]] auto max_id() const noexcept;
 

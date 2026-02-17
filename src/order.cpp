@@ -18,7 +18,7 @@ OrderPool::OrderPool(std::size_t capacity)
   assert(free_count_ == storage_.size());
 }
 
-auto OrderPool::allocate()
+Order* OrderPool::allocate()
 {
   if (free_head_ == nullptr) {
     return static_cast<Order*>(nullptr);
@@ -69,7 +69,7 @@ OrderIdMap::OrderIdMap(std::size_t max_orders)
 
 }
 
-auto OrderIdMap::get(OrderId order_id) const noexcept 
+Order* OrderIdMap::get(OrderId order_id) const noexcept 
 {
   if (order_id >= by_id_.size()) {
     return static_cast<Order*>(nullptr);
@@ -92,7 +92,7 @@ void OrderIdMap::clear(OrderId order_id) noexcept
   by_id_[order_id] = nullptr;
 }
 
-auto OrderIdMap::exists(OrderId order_id) const noexcept
+bool OrderIdMap::exists(OrderId order_id) const noexcept
 {
   return by_id_[order_id] != nullptr;
 }
