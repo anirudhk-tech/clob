@@ -1,9 +1,11 @@
+#include "clob/ladder.hpp"
 #include "clob/order.hpp"
 #include "clob/price_level.hpp"
 
 #include <cstddef>
 #include <optional>
 #include <string_view>
+#include <vector>
 
 namespace clob {
 
@@ -15,6 +17,13 @@ public:
     bool accepted;
     std::optional<std::string_view> reject_reason;
   };
+
+  struct TradeEvent { OrderId resting_id; OrderId incoming_id; PriceTicks price; Qty qty; };
+  struct DoneEvent  { OrderId order_id; };
+  struct EventSink {
+    void on_trade(const TradeEvent&) {}
+    void on_done(const DoneEvent&) {}
+  };
   
   AddResult add_limit(OrderId order_id, Qty qty, Side side, PriceTicks price);
 
@@ -23,6 +32,7 @@ public:
 private:
   OrderPool pool_;
   OrderIdMap id_map_;
+  Ladder ladder_;
 
   PriceLevel* bid_level_{nullptr};
   PriceLevel* ask_level_{nullptr};
