@@ -1,5 +1,7 @@
 # ---------- Build output (CMake / general) ----------
 /build*/                 # Out-of-source CMake build folders like build/, build-debug/, build-release/
+build-asan/
+build-rel/
 /cmake-build-*/          # Common CLion-style build folders
 /out/                    # Some folks use out/ for build artifacts
 build

@@ -8,7 +8,7 @@ namespace clob {
 OrderPool::OrderPool(std::size_t capacity)
   : storage_(capacity)
 {
-  for (auto node : storage_) {
+  for (auto& node : storage_) {
     node.prev = nullptr;
     node.next = free_head_;
     free_head_ = &node;
@@ -25,6 +25,9 @@ Order* OrderPool::allocate()
   }
 
   Order* node = free_head_;
+
+  node->prev = nullptr;
+  node->next = nullptr;
 
   free_head_ = node->next;
   node->next = nullptr;
@@ -44,7 +47,7 @@ void OrderPool::free(Order* order)
     return;
   }
 
-  assert(node->prev == nullptr && node->next == nullptr);
+  assert(order->prev == nullptr && order->next == nullptr);
 
   order->next = free_head_;
   order->prev = nullptr;

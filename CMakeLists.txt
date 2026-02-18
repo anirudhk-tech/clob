@@ -5,40 +5,49 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(MSVC)
-    add_compile_options(/W4 /permissive- /experimental:module)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror -fno-exceptions)
-endif()
-
-# LSP compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Main clob library
+option(CLOB_ASAN "Enable AddressSanitizer" OFF)
+option(CLOB_UBSAN "Enable UndefinedBehaviorSanitizer" OFF)
+
+if(MSVC)
+  add_compile_options(/W4 /permissive-)
+else()
+  add_compile_options(-Wall -Wextra -Wpedantic -Werror -fno-exceptions)
+endif()
+
 add_library(clob
-    src/book.cpp
-    src/order.cpp
-    src/price_level.cpp
+  src/book.cpp
+  src/order.cpp
+  src/price_level.cpp
+  src/ladder.cpp
 )
 
 target_include_directories(clob PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(clob PUBLIC cxx_std_20)
-
-# Benchmarks
 add_executable(book_bench benchmarks/book_bench.cpp)
 target_link_libraries(book_bench PRIVATE clob)
-target_compile_features(book_bench PUBLIC cxx_std_20)
 
-# Replay app
 add_executable(clob_replay apps/clob_replay.cpp)
 target_link_libraries(clob_replay PRIVATE clob)
-target_compile_features(clob_replay PUBLIC cxx_std_20)
 
-# Tests
-enable_testing()
-add_subdirectory(tests)
+function(clob_enable_sanitize target)
+  if(NOT MSVC)
+    if(CLOB_ASAN)
+      target_compile_options(${target} PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+      target_link_options(${target} PRIVATE -fsanitize=address)
+    endif()
+    if(CLOB_UBSAN)
+      target_compile_options(${target} PRIVATE -fsanitize=undefined)
+      target_link_options(${target} PRIVATE -fsanitize=undefined)
+    endif()
+  endif()
+endfunction()
+
+clob_enable_sanitize(clob)
+clob_enable_sanitize(book_bench)
+clob_enable_sanitize(clob_replay)
 

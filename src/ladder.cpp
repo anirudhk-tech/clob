@@ -18,8 +18,8 @@ bool Ladder::is_valid_price(PriceTicks p) const noexcept {
   return cfg_.min_price_ticks <= p && p <= cfg_.max_price_ticks;
 }
 
-PriceTicks Ladder::min_price_ticks() const noexcept { return cfg_.min_price_ticks };
-PriceTicks Ladder::max_price_ticks() const noexcept { return cfg_.max_price_ticks };
+PriceTicks Ladder::min_price_ticks() const noexcept { return cfg_.min_price_ticks; };
+PriceTicks Ladder::max_price_ticks() const noexcept { return cfg_.max_price_ticks; };
 
 std::size_t Ladder::index_of(PriceTicks p) const noexcept {
   return static_cast<std::size_t>(p - cfg_.min_price_ticks);

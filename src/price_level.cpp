@@ -21,7 +21,7 @@ void PriceLevel::push_back(Order* order) noexcept {
   tail = order;
 }
 
-auto PriceLevel::pop_front() noexcept {
+Order* PriceLevel::pop_front() noexcept {
   if (!head) return static_cast<Order*>(nullptr);
 
   Order* order = head;
